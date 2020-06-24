@@ -1,0 +1,26 @@
+{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% set is_hide_deletable = options.hide_stack_delete_btn is defined and options.hide_stack_delete_btn|is_true %}
+
+<div class="file_container"
+	 data-control="{{ options|is_file_control }}"
+	 data-control-type="{{ options|is_file_control ? options.control }}"
+>
+
+	<div class="pull-right pad10B">
+		{% if options|is_file_control %}
+			{{ mcr.showFileController(uploadedInfo) }}
+		{% elseif not is_hide_deletable %}
+			<button
+					class="btn btn-xs btn-danger netlivaDeleteFile"
+					data-delete-url="{{ path("netliva_filehelper_singleFileDelete",{fileGroup:group~"-"~key, fileCode:uploadedInfo.code}) }}"
+					data-refresh='refreshFileHardLine("{{ group~"-"~key }}", "{{ uploadedInfo.code }}")'
+			>SİL</button>
+		{% endif %}
+	</div>
+
+	{{ mcr.showFileInfo(uploadedInfo, uploadedInfo.name, {optional:true}) }}
+</div>
+
+<script type="text/javascript">
+	{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+</script>

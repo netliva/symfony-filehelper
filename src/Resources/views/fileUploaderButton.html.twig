@@ -1,0 +1,30 @@
+{% set sfx = "_"~fileGroup~"_"~fileCode~(listId?"_"~listId) %}
+
+
+<form
+	id="file_upload_btn{{ sfx }}"
+	class="form netlivaSingleUpload"
+	method="POST"
+	enctype="multipart/form-data"
+	action="{{ path("netliva_filehelper_singleFileUpload") }}"
+	data-get-name="{{ (opt.getName is defined and opt.getName) ? 1 : 0 }}"
+	data-select-date="{{ (opt.selectDate is defined and opt.selectDate) ? 1 : 0 }}"
+	data-hard-stack-list="{{ (opt.hard_stack_list is defined and opt.hard_stack_list|length) ? opt.hard_stack_list|json_encode(): 0 }}"
+	data-multiple="{{ opt.multiupload?"multiple" }}"
+>
+	<input type="hidden" name="fileGroup" value="{{ fileGroup }}" />
+	<input type="hidden" name="fileCode" value="{{ fileCode }}" />
+	<input type="hidden" name="listId" value="{{ listId }}" />
+	<input type="hidden" name="opt" value="{{ opt|json_encode() }}" />
+	<input type="hidden" name="name" value="{{ opt.name is defined ? opt.name}}" />
+	{% if opt.selectDate is defined and opt.selectDate %}
+		<input type="hidden" name="file_date" id="file_date" value=""  />
+	{% endif %}
+	<div class="fileinput" data-provides="fileinput">
+		<span class="btn btn-info btn-file">
+			<span><i class="glyph-icon icon-upload"></i>{% if opt.button_desc %} <span>{{ isUplodedBefore ? "Dosyayı Güncelle" : "Dosya Yükle" }}</span>{% endif %}</span>
+			<input type="file" name="singleFile{{ opt.multiupload?"[]" }}" {{ opt.multiupload?"multiple" }}/>
+		</span>
+	</div>
+
+</form>

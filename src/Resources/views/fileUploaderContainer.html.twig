@@ -1,0 +1,12 @@
+{% set fileext = file|get_extention %}
+
+<div
+	id="singleFileArea-{{fileGroup}}-{{fileCode}}"
+	class="
+		singleFileArea
+		singleFileArea-style-{{ opt.style }}
+		"
+	data-refresh-url="{{path("netliva_filehelper_refreshSingleFileWithIcon")}}"
+>
+	{% include "NetlivaFileBundle:File:fileUploader.html.twig" %}
+</div>

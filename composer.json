@@ -1,0 +1,22 @@
+{
+	"name": "netliva/symfony-filehelper",
+	"license": "MIT",
+	"type": "symfony-bundle",
+	"description": "Netliva File Helper Library",
+	"autoload": {
+		"psr-4": {
+			"Netliva\\SymfonyFileHelperBundle\\": "src/"
+		}
+	},
+	"require": {
+		"php": "^7.1.3",
+		"symfony/framework-bundle": "~2.0|~3.0|~4.0",
+		"sensio/framework-extra-bundle": "^4.0|^5.0",
+		"symfony/twig-pack": "^1.0",
+		"doctrine/orm": "^2.5",
+		"ext-json": "*"
+	},
+	"minimum-stability": "stable",
+	"require-dev": {
+	}
+}

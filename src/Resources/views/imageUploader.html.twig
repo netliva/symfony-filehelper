@@ -1,0 +1,10 @@
+<form class="netliva-image-upload-helper-form" id="netliva-image-upload-{{ id }}" method="POST"  enctype="multipart/form-data" action="{{ path("netliva_filehelper_singleImageUpload") }}">
+	<input type="hidden" name="options" value="{{options|json_encode}}" />
+	<div class="fileinput fileinput-new" data-provides="fileinput">
+		<span class="btn btn-primary btn-sm btn-file">
+			<span class="fileinput-new">{{options.label|raw}}</span>
+			<input type="file" name="singleImg" id="singleImg_{{ id }}">
+		</span>
+	</div>
+
+</form>

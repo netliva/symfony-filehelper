@@ -1,0 +1,29 @@
+services:
+
+    netliva.filehelper.image:
+        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
+        public: true
+
+
+    Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper:
+        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
+        public: false
+        arguments: ["@service_container", "@twig"]
+        calls:
+            - [setRequest, ["@?request="]]
+        tags:
+            - { name: twig.extension }
+
+
+    netliva.filehelper.file:
+        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper
+        public: true
+
+    Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper:
+        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper
+        public: false
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@twig"]
+        calls:
+            - [setRequest, ["@?request="]]
+        tags:
+            - { name: twig.extension }

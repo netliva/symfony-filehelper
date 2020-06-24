@@ -1,0 +1,28 @@
+{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+
+{% for files in uploadedFiles %}
+	<li class="list-group-item" id="{{options.group~"-"~files.id}}">
+
+		<div class="file_container"
+			 data-control="{{ options|is_file_control }}"
+			 data-control-type="{{ options|is_file_control ? options.control }}"
+		>
+			<div class="pull-right" style="display: flex">
+				{% if options|is_file_control %}
+					{{ mcr.showFileController(files) }}
+				{% elseif options.upload_btn|is_true %}
+					{{ file_uploader_button(options.group, files.code, null, options) }}
+					{% if options.deletable %}
+						<button class="btn btn-danger" deleteRecord data-href="{{ path('netliva_file_fileDelete', {"id": files.id}) }}"><i class="glyph-icon icon-trash"></i></button>
+					{% endif %}
+				{% endif %}
+			</div>
+
+			{{ mcr.showFileInfo(files, files.name) }}
+		</div>
+
+		<script type="text/javascript">
+			{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+		</script>
+	</li>
+{% endfor %}

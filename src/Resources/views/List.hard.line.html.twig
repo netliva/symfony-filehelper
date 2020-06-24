@@ -1,0 +1,40 @@
+{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+
+{% set file = get_file(group, key) %}
+{% set is_deletable = options.allow_delete is defined and options.allow_delete|is_true and file and file.path %}
+
+<div class="file_container"
+	 data-control="{{ options|is_file_control }}"
+	 data-control-type="{{ options|is_file_control ? options.control }}"
+>
+
+	<div class="pull-right {{ is_deletable ? "nfb_allow_delete_area" }}">
+		{% set uploader_btn = false %}
+		{% if options|is_prepare_information %}
+			{{ mcr.perpareInformation(listId~"-_-"~key, value.name) }}
+		{% else %}
+			{% if options|is_file_control %}
+				{{ mcr.showFileController(file) }}
+			{% endif %}
+			{% if options.upload_btn|is_true and (not options|is_file_control or not file or file.assess is not null) %}
+				{% set uploader_btn = true %}
+				{{ file_uploader_button(group, key, listId, options) }}
+				{% if is_deletable %}
+					<button
+						class="btn btn-xs btn-danger netlivaDeleteFile"
+						data-delete-url="{{ path("netliva_filehelper_singleFileDelete",{fileGroup:group, fileCode:key}) }}"
+						data-refresh='refreshFileHardLine("{{ group }}", "{{ key }}")'
+					>SİL</button>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	</div>
+
+	{{ mcr.showFilePreparedInformation(listId~"-_-"~key) }}
+
+	{{ mcr.showFileInfo(file, value.name, {optional:uploader_btn?options|is_optional(value, key):true}) }}
+</div>
+
+<script type="text/javascript">
+	{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+</script>

@@ -1,0 +1,50 @@
+{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% if fileext is not defined %}
+	{% set fileext = file|get_extention %}
+{% endif %}
+
+<div class="file_container"
+	 data-control="{{ opt|is_file_control }}"
+	 data-control-type="{{ opt|is_file_control ? opt.control }}"
+>
+	{% if opt.style == "click" %}
+		<img class="optClickBtn" src="{{ asset("bundles/netlivafile/images/file-icons/"~fileext~"-32.png") }}" />
+		{{'<div class="optClickArea">'}}
+	{% endif %}
+
+	<div class="pull-right {{ opt.allow_delete is defined and opt.allow_delete and fileext != "notfound" ? "nfb_allow_delete_area" }}">
+
+		{% set uploader_btn = false %}
+		{% if opt|is_prepare_information %}
+			{{ mcr.perpareInformation(fileGroup, opt.name is defined? opt.name) }}
+		{% elseif opt|is_file_control %}
+			{{ mcr.showFileController(file) }}
+		{% elseif opt.upload_btn|is_true %}
+			{% set uploader_btn = true %}
+			{{ file_uploader_button(fileGroup, fileCode, null, opt) }}
+			{% if opt.allow_delete is defined and opt.allow_delete and opt.allow_delete != "false" and fileext != "notfound" %}
+				<button
+						class="btn btn-xs btn-danger netlivaDeleteFile"
+						data-delete-url="{{ path("netliva_filehelper_singleFileDelete",{fileGroup:fileGroup, fileCode:fileCode}) }}"
+						data-refresh='refreshSingleFileUpload("{{ fileGroup }}", "{{ fileCode }}")'
+				>SİL</button>
+			{% endif %}
+		{% endif %}
+	</div>
+
+	{{ mcr.showFilePreparedInformation(fileGroup) }}
+
+	{{ mcr.showFileInfo(file, file ? file.name : opt.name, {
+		showDetail: opt.info is not defined or opt.info == "show",
+		optional: uploader_btn ? opt.optional : true
+	}) }}
+
+	{{ opt.style == "click" ? '</div>' }}
+</div>
+
+<textarea name="opt{{fileGroup~"-"~fileCode}}" id="opt{{fileGroup~"-"~fileCode}}" style="display: none;">{{ opt|json_encode()|raw }}</textarea>
+
+<script type="text/javascript">
+	if (typeof(netliva_file_singleFileUpload_path) == "undefined")
+		netliva_file_singleFileUpload_path = "{{path("netliva_filehelper_singleFileUpload")}}";
+</script>

@@ -1,0 +1,20 @@
+{% import '@NetlivaFile/File/macros.html.twig' as funcs %}
+
+
+
+<div class="panel panel-default netliva-file-list" id="netliva-file-list-{{group}}">
+	<!-- Default panel contents -->
+	<div class="panel-heading">{{ fileList.title }}</div>
+	<div class="panel-body">
+		<p><em>{{ fileList.desc }}</em></p>
+	</div>
+	<!-- List group -->
+	<ul class="list-group" data-list-id="{{listId}}" data-options="{{ options|json_encode }}">
+		{{ funcs.getList(fileList.values, group, listId, options, null) }}
+	</ul>
+</div>
+
+<script type="text/javascript">
+	if (typeof(netliva_file_singleFileUpload_path) == "undefined")
+		netliva_file_singleFileUpload_path = "{{path("netliva_filehelper_singleFileUpload")}}";
+</script>
