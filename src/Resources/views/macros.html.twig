@@ -1,38 +1,40 @@
 
 {% macro getList(list, group, listId, options, keyPrefix) %}
-	{% import "@NetlivaFile/File/macros.html.twig" as self_macro %}
+	{% import "@NetlivaSymfonyFileHelper/macros.html.twig" as self_macro %}
 
-	{% for key, value in list if value.accepted_filters|length == 0 or options.filter in value.accepted_filters or options|is_prepare_information %}
-		{% if keyPrefix %}
-			{% set key = keyPrefix~"_"~key%}
-		{% endif %}
+	{% for key, value in list %}
+		{% if value.accepted_filters|length == 0 or options.filter in value.accepted_filters or options|is_prepare_information %}
+			{% if keyPrefix %}
+				{% set key = keyPrefix~"_"~key%}
+			{% endif %}
 
-		<li class="list-group-item" id="{{group~"-"~key}}" data-refresh-url="{{ mypath( value.type == "hard_stack" ? 'netliva_stack_refreshLine' : 'netliva_file_refreshLine' ) }}">
-			{% if value.type == "list" and  value.children is defined and value.children|length %}
-				{% set totalUploaded = value.children|uploaded_count(group, key) %}
-				<div class="list-sub-group">
-					<div class="pad10B pad10T">
-						<div class="sub_list_title d-flex">
-							<span class="folder-icon">
-								<i class="glyph-icon icon-folder"></i>
-								<i class="glyph-icon icon-folder-open"></i>
-							</span>
-							<div>
-								{{ value.name }} <br/>
-								{{ (totalUploaded ? '<em class="text-primary">['~(value.children|length) ~" adet dosyadan, "~totalUploaded ~ " adet dosya yüklendi]</em>" : '<em class="text-warning">['~(value.children|length) ~' adet dosyanın hiç biri yüklenmedi]</em>')|raw }}
+			<li class="list-group-item" id="{{group~"-"~key}}" data-refresh-url="{{ path( value.type == "hard_stack" ? 'netliva_stack_refreshLine' : 'netliva_filehelper_refreshLine' ) }}">
+				{% if value.type == "list" and  value.children is defined and value.children|length %}
+					{% set totalUploaded = value.children|uploaded_count(group, key) %}
+					<div class="list-sub-group">
+						<div class="pad10B pad10T">
+							<div class="sub_list_title d-flex">
+								<span class="folder-icon">
+									<i class="fa fa-folder"></i>
+									<i class="fa fa-folder-open"></i>
+								</span>
+								<div>
+									{{ value.name }} <br/>
+									{{ (totalUploaded ? '<em class="text-primary">['~(value.children|length) ~" adet dosyadan, "~totalUploaded ~ " adet dosya yüklendi]</em>" : '<em class="text-warning">['~(value.children|length) ~' adet dosyanın hiç biri yüklenmedi]</em>')|raw }}
+								</div>
 							</div>
 						</div>
+						<ul class="list-group mrg10T" data-list-id="{{listId}}" data-options="{{ options|json_encode }}">
+							{{ self_macro.getList(value.children, group, listId, options, key) }}
+						</ul>
 					</div>
-					<ul class="list-group mrg10T" data-list-id="{{listId}}" data-options="{{ options|json_encode }}">
-						{{ self_macro.getList(value.children, group, listId, options, key) }}
-					</ul>
-				</div>
-			{% elseif value.type == "hard_stack" %}
-				{% include "NetlivaFileBundle:File:List.stack.html.twig" %}
-			{% else %}
-				{% include "NetlivaFileBundle:File:List.hard.line.html.twig" %}
-			{% endif %}
-		</li>
+				{% elseif value.type == "hard_stack" %}
+					{% include "@NetlivaSymfonyFileHelper/List.stack.html.twig" %}
+				{% else %}
+					{% include "@NetlivaSymfonyFileHelper/List.hard.line.html.twig" %}
+				{% endif %}
+			</li>
+		{% endif %}
 	{% endfor %}
 {% endmacro %}
 
@@ -41,8 +43,8 @@
 	{# @var file \Netliva\SymfonyFileHelperBundle\Entity\FileList #}
 	{% set options = {showDetail:true, icon_size:'128', style: "line", hash:false }|merge(options) %}
 	{% set filePath = null %}
-	{% if file and file_exists(file.path) %}
-		{% set filePath = options.hash ? hash_file_path(file.path) : file.path %}
+	{% if file and netliva_file_exists(file.path) %}
+		{% set filePath = options.hash ? public_media_uri(file.path) : secure_media_uri(file.path) %}
 	{% endif %}
 
 	<div class="fileInfo">
@@ -56,8 +58,8 @@
 		</figure>
 		{% if options.style == "line" %}
 			<figcaption>
-				{{ (filePath ? '<a href="'~asset(filePath)~'" class="netliva_file_link" target="_blank"><i class="glyph-icon icon-external-link"></i></a> &nbsp;':'')|raw }}
-				{{ (file and file.inPast|length  ? '<a href="#" class="showPastBtn"><i class="glyph-icon icon-clock-o"></i></a> &nbsp;':'')|raw }}
+				{{ (filePath ? '<a href="'~asset(filePath)~'" class="netliva_file_link" target="_blank"><i class="fa fa-external-link-alt"></i></a> &nbsp;':'')|raw }}
+				{{ (file and file.inPast|length  ? '<a href="#" class="showPastBtn"><i class="fa fa-history"></i></a> &nbsp;':'')|raw }}
 
 				{{ title }}
 				{% if file is null %}
@@ -65,21 +67,21 @@
 				{% elseif file.assess == "rejection" %}
 					<div><em class="text-danger">[Dosya Onaylanmamış]</em></div>
 					<div class="popover-self">
-						<i class="glyph-icon icon-info-circle"></i> {{ file.desc }}
+						<i class="fa fa-info-circle"></i> {{ file.desc }}
 					</div>
 				{% elseif not file.path %}
 					<div><em class="text-warning">[Dosya Silinmiş]</em></div>
 					{% if options.showDetail %}
 						<ul>
-							<li>{{ ('<span class="text-muted">Silen:</span> '~ file.updateBy.name )|raw   }}</li>
+							<li>{{ ('<span class="text-muted">Silen:</span> '~ file.updateBy )|raw   }}</li>
 							<li>{{ ('<span class="text-muted">Silme Tarihi:</span> ' ~ file.updateAt | date("d.m.Y H:i") )|raw}}</li>
 						</ul>
 					{% endif %}
-				{% elseif not file_exists(file.path) %}
+				{% elseif not netliva_file_exists(file.path) %}
 					<div><em class="text-danger">[Dosya Bulunamadı]</em></div>
 				{% elseif options.showDetail %}
 					<ul>
-						<li>{{ (file.updateAt ? '<span class="text-muted">Güncelleyen:</span> '~ file.updateBy.name : '<span class="text-muted">Ekleyen: </span>' ~ file.addBy.name)| raw   }}</li>
+						<li>{{ (file.updateAt ? '<span class="text-muted">Güncelleyen:</span> '~ file.updateBy : '<span class="text-muted">Ekleyen: </span>' ~ file.addBy)| raw   }}</li>
 						<li>{{ (file.updateAt ? '<span class="text-muted">Güncelleme Tarihi:</span> ' ~ file.updateAt | date("d.m.Y H:i") : '<span class="text-muted">Ekleme Tarihi: </span>' ~ file.addAt | date("d.m.Y H:i"))| raw }}</li>
 					</ul>
 				{% endif %}
@@ -93,27 +95,27 @@
 				<li class="pastFileInfo list-group-item">
 					<figure>
 						{% set filePath = null %}
-						{% if file_exists(pastFile.path) %}
-							{% set filePath = options.hash ? hash_file_path(pastFile.path) : pastFile.path %}
+						{% if netliva_file_exists(pastFile.path) %}
+							{% set filePath = options.hash ? public_media_uri(pastFile.path) : secure_media_uri(pastFile.path) %}
 						{% endif %}
 
 						{{ (filePath ? '<a href="'~asset(filePath)~'" class="netliva_file_link" target="_blank">':'')|raw }}
-						<img src="{{ asset("bundles/netlivafile/images/file-icons/"~(pastFile.extention?:"notfound")~"-128.png") }}" />
+						<img src="{{ pastFile|get_file_thumbnail(128) }}" />
 						{{ filePath ? '</a>':'' }}
 					</figure>
 					<figcaption>
-						{{ (filePath ? '<a href="'~asset(filePath)~'" class="netliva_file_link" target="_blank"><i class="glyph-icon icon-external-link"></i></a>':'')|raw }} &nbsp;
+						{{ (filePath ? '<a href="'~asset(filePath)~'" class="netliva_file_link" target="_blank"><i class="fa fa-external-link"></i></a>':'')|raw }} &nbsp;
 
 						{{ pastFile.name }}
 
 						{% if pastFile.assess is defined and pastFile.assess == "rejection" %}
 							<div><em class="text-danger">[Dosya Reddetme İşlemi ]</em></div>
 							<div class="popover-self">
-								<i class="glyph-icon icon-info-circle"></i> {{ pastFile.desc }}
+								<i class="fa fa-info-circle"></i> {{ pastFile.desc }}
 							</div>
 							{% if options.showDetail %}
 								<ul>
-									<li><span class="text-muted">Reddeden: </span>{{ pastFile.addBy.name is defined ? pastFile.addBy.name : '---' }}</li>
+									<li><span class="text-muted">Reddeden: </span>{{ pastFile.addBy is defined ? pastFile.addBy.name : '---' }}</li>
 									<li><span class="text-muted">Red Tarihi: </span>{{ pastFile.addAt.date | date("d.m.Y H:i") }}</li>
 								</ul>
 							{% endif %}
@@ -122,7 +124,7 @@
 							<em class="text-danger">Dosya Silme İşlemi</em>
 							{% if options.showDetail %}
 								<ul>
-									<li><span class="text-muted">Silen: </span>{{ pastFile.addBy.name is defined ? pastFile.addBy.name : '---' }}</li>
+									<li><span class="text-muted">Silen: </span>{{ pastFile.addBy is defined ? pastFile.addBy.name : '---' }}</li>
 									<li><span class="text-muted">Silme Tarihi: </span>{{ pastFile.addAt.date | date("d.m.Y H:i") }}</li>
 								</ul>
 							{% endif %}
@@ -131,13 +133,13 @@
 							<em class="text-danger">[Dosya Bulunamadı]</em>
 							{% if options.showDetail %}
 								<ul>
-									<li><span class="text-muted">Ekleyen: </span>{{ pastFile.addBy.name is defined ? pastFile.addBy.name : '---' }}</li>
+									<li><span class="text-muted">Ekleyen: </span>{{ pastFile.addBy is defined ? pastFile.addBy.name : '---' }}</li>
 									<li><span class="text-muted">Ekleme Tarihi: </span>{{ pastFile.addAt.date | date("d.m.Y H:i") }}</li>
 								</ul>
 							{% endif %}
 						{% elseif options.showDetail %}
 							<ul>
-								<li><span class="text-muted">Ekleyen: </span>{{ pastFile.addBy.name is defined ? pastFile.addBy.name : '---' }}</li>
+								<li><span class="text-muted">Ekleyen: </span>{{ pastFile.addBy is defined ? pastFile.addBy.name : '---' }}</li>
 								<li><span class="text-muted">Ekleme Tarihi: </span>{{ pastFile.addAt.date | date("d.m.Y H:i") }}</li>
 							</ul>
 						{% endif %}
@@ -158,9 +160,9 @@
 			 data-file-name="{{ file.name }}"
 		>
 			{% if not file.assess %}
-				<button class="btn btn-success"><i class="glyph-icon icon-check"></i></button>
+				<button class="btn btn-success"><i class="fa fa-check"></i></button>
 				<br/>
-				<button class="btn btn-danger"><i class="glyph-icon icon-ban"></i></button>
+				<button class="btn btn-danger"><i class="fa fa-ban"></i></button>
 				<script type="text/javascript">
 					if (typeof netliva_file_assess_path == "undefined")
 						netliva_file_assess_path = '{{ path("netliva_filehelper_assess") }}';
@@ -175,7 +177,7 @@
 		 data-file-group="{{ fileGroup }}"
 		 data-group-name="{{ name }}"
 	>
-		<button class="btn btn-success"><i class="glyph-icon icon-check"></i></button>
+		<button class="btn btn-success"><i class="fa fa-check"></i></button>
 		<script type="text/javascript">
 			if (typeof netliva_all_approve_path == "undefined")
 				netliva_all_approve_path = '{{ path("netliva_filehelper_all_approve") }}';
@@ -185,14 +187,14 @@
 
 {% macro perpareInformation(key, name) %}
 	<div class="file_list_prepare_information pad10B" data-name="{{ name }}" data-url="{{ path('settings_file_information', {'file_key': key}) }}">
-		<button class="btn btn-success"><i class="glyph-icon icon-info-circle"></i></button>
+		<button class="btn btn-success"><i class="fa fa-info-circle"></i></button>
 	</div>
 {% endmacro %}
 
 {% macro showFilePreparedInformation(key) %}
 	{% set fileInf = get_option("file_info_"~key) %}
 	{% if fileInf %}
-		<i class="glyph-icon icon-info-circle popover-button file_list_info_icon" data-id="#file_info_{{ key }}" data-placement="right"></i>
+		<i class="fa fa-info-circle popover-button file_list_info_icon" data-id="#file_info_{{ key }}" data-placement="right"></i>
 		<div id="file_info_{{ key }}" class="hide">
 			<div class="file_info_area">
 				{{ fileInf }}

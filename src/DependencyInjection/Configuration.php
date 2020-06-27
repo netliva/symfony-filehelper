@@ -35,6 +35,8 @@ class Configuration implements ConfigurationInterface
 							->prototype('scalar')->end()
 						->end()
 						->scalarNode('upload_path')->defaultValue("media/upload")->end()
+						->scalarNode('public_uri_prefix')->defaultValue("media/upload")->end()
+						->scalarNode('secure_uri_prefix')->defaultValue("media/upload")->end()
 						->scalarNode('max_size')->defaultValue(1024 * 1024 * 1024)->end()
 					->end()
 				->end()

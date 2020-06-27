@@ -1,4 +1,4 @@
-var netliva_file_helper = {
+netliva_file_helper = {
 	showPastBtnBind : function ()
 	{
 		$(".showPastBtn:not(.binded)").each(function () {
@@ -86,12 +86,11 @@ var netliva_file_helper = {
 						$form.find('.fileinput .btn')
 							.removeClass("btn-success")
 							.addClass("btn-info");
-						if (response.total > 1 && response.status === "success") success(
-							"Tüm dosyalar başarıyla yüklendi",
-							600
-						); else
-							if (response.status === "partial_success") warning(response.total + " adet dosyadan " + response.success + " adedi başarıyla yüklendi. <br>Yüklenemeyenlerin sebebi; <br> - " + response.messages.join(
-								'<br> - '));
+						if (response.total > 1 && response.status === "success")
+							success("Tüm dosyalar başarıyla yüklendi", 600);
+						else if (response.status === "partial_success")
+							warning(response.total + " adet dosyadan " + response.success + " adedi başarıyla yüklendi. <br>Yüklenemeyenlerin sebebi; <br> - " +
+									response.messages.join('<br> - '));
 					}
 					else
 					{
@@ -108,10 +107,17 @@ var netliva_file_helper = {
 			$(this).find('input[name="singleFile[]"]').change(function () {
 				$(this).closest("form").submit();
 			});
-			$(this).find('input[name=singleFile]').change(function () {
+
+			$(this).find('input[name=singleFile]').change(function ()
+		    {
 				$form = $(this).closest("form");
 				options = JSON.parse($form.find('input[name=opt]').val());
-				if ($form.find('input[name=listId]').val()) $form.submit(); else
+				if ($form.find('input[name=listId]').val())
+				{
+					$form.submit();
+				}
+				else
+				{
 					if ($form.data("getName") || $form.data("selectDate") || $form.data("hardStackList"))
 					{
 						var content = '';
@@ -130,8 +136,7 @@ var netliva_file_helper = {
 						if ($form.data("selectDate")) content += '<h4><br>Tarih: </h4><input type="text" id="file_date_helper" value="" class="form-control input" style="margin-top:10px" />';
 
 
-						myDialogBox({
-							id: 'SingleFileApprow',
+						netliva_file_helper.dialog.open({
 							title: 'Dosya Bilgileri',
 							content: content,
 							init: function () {
@@ -142,7 +147,7 @@ var netliva_file_helper = {
 									};
 									if (typeof options.maxDate !== "undefined") opt.maxDate = options.maxDate;
 									if (typeof options.minDate !== "undefined") opt.minDate = options.minDate;
-									$("#generalDialogBoxSingleFileApprow #file_date_helper")
+									$("#netliva_file_helper_modal #file_date_helper")
 										.datetimepicker(opt)
 										.on("dp.change", function (e) {
 											$form.find('input[name=file_date]').val(moment(e.date).format(
@@ -156,19 +161,18 @@ var netliva_file_helper = {
 									label: 'Gönder', class: 'success', action: function (e) {
 										if (!$form.data("selectDate") || $form.find('input[name=file_date]').val())
 										{
-											$("#generalDialogBoxSingleFileApprow").modal('hide');
-											if ($form.data("hardStackList")) $form.find("input[name='name']").val(
-												$("#generalDialogBoxSingleFileApprow #stack_temp").val()); else $form.find(
-												"input[name='name']").val($(
-												"#generalDialogBoxSingleFileApprow #name_temp").val());
+											$("#netliva_file_helper_modal").modal('hide');
+											if ($form.data("hardStackList"))
+												$form.find("input[name='name']").val($("#netliva_file_helper_modal #stack_temp").val());
+											else
+												$form.find("input[name='name']").val($("#netliva_file_helper_modal #name_temp").val());
 											$form.submit();
 										}
-										else
-											if ($form.data("selectDate"))
-											{
-												alert("Tarih seçimi yapınız");
-												$("#generalDialogBoxSingleFileApprow #file_date_helper").focus();
-											}
+										else if ($form.data("selectDate"))
+										{
+											alert("Tarih seçimi yapınız");
+											$("#netliva_file_helper_modal #file_date_helper").focus();
+										}
 									}
 								}, {label: 'Vazgeç', action: 'close', class: 'danger'}
 							],
@@ -178,6 +182,7 @@ var netliva_file_helper = {
 					{
 						$form.submit();
 					}
+				}
 			})
 		});
 	},
@@ -185,12 +190,11 @@ var netliva_file_helper = {
 
 	refreshFileAreas : function (response)
 	{
-		if ($("#netliva-file-list-" + response.fileGroup).length && $("#opt" + response.fileGroup).length) netliva_file_helper.refreshFileSoftLine(
-			response.fileGroup); else
-			if ($("#singleFileArea-" + response.fileGroup + "-" + response.fileCode).length && $("#opt" + response.fileGroup + "-" + response.fileCode).length) netliva_file_helper.refreshSingleFileUpload(
-				response.fileGroup,
-				response.fileCode
-			); else netliva_file_helper.refreshFileHardLine(response.fileGroup, response.fileCode);
+		if ($("#netliva-file-list-" + response.fileGroup).length && $("#opt" + response.fileGroup).length)
+			netliva_file_helper.refreshFileSoftLine(response.fileGroup);
+		else if ($("#singleFileArea-" + response.fileGroup + "-" + response.fileCode).length && $("#opt" + response.fileGroup + "-" + response.fileCode).length)
+			netliva_file_helper.refreshSingleFileUpload(response.fileGroup, response.fileCode);
+		else netliva_file_helper.refreshFileHardLine(response.fileGroup, response.fileCode);
 		$('#generalDialogBox').modal('hide');
 	},
 
@@ -201,7 +205,7 @@ var netliva_file_helper = {
 			$(this).find(".btn-success").click(function () {
 				file_name = $(this).closest(".file_control_buttons").data("fileName");
 				file_id = $(this).closest(".file_control_buttons").data("fileId");
-				myDialogBox({
+				netliva_file_helper.dialog.open({
 					title: 'Dosya Onayı',
 					content: '<strong>`' + file_name + '`</strong> isimli dosyanın kontrolünü yapıp UYGUN olduğunu onaylıyor musunuz?',
 					buttons: [
@@ -220,7 +224,7 @@ var netliva_file_helper = {
 			$(this).find(".btn-danger").click(function () {
 				file_name = $(this).closest(".file_control_buttons").data("fileName");
 				file_id = $(this).closest(".file_control_buttons").data("fileId");
-				myDialogBox({
+				netliva_file_helper.dialog.open({
 					title: 'Uygunsuzluk Belirtme',
 					content: '<div class="text-center mrg15B"><strong>`' + file_name + '`</strong> isimli dosya hakkında <br />UYGUNSUZ\'luk açıklamalarınız belirtiniz;</div> <div class="form-group"> <label class="col-sm-4 control-label required" for="file_suit_desc">Açıklamalar:</label><div class="col-sm-8"><textarea id="file_suit_desc" required="required" class="form-control"></textarea></div>',
 					buttons: [
@@ -245,7 +249,7 @@ var netliva_file_helper = {
 			$(this).find(".btn-success").click(function () {
 				group_name = $(this).closest(".all_approve_button").data("groupName");
 				file_group = $(this).closest(".all_approve_button").data("fileGroup");
-				myDialogBox({
+				netliva_file_helper.dialog.open({
 					title: 'Dosya Onayı',
 					content: '<strong>`' + group_name + '`</strong> adlı gruptaki <u>onay bekleyen</u> dosyaların tümünün kontrolünü yapıp hepsinin UYGUN olduğunu onaylıyor musunuz?',
 					buttons: [
@@ -273,7 +277,7 @@ var netliva_file_helper = {
 				url = $(this).closest(".file_list_prepare_information").data("url");
 				if (url)
 				{
-					myDialogBox({
+					netliva_file_helper.dialog.open({
 						id: 'PrepareInfo',
 						title: 'Dosya Bilgileri',
 						url: url,
@@ -308,7 +312,7 @@ var netliva_file_helper = {
 				e.preventDefault();
 				var deleteUrl = $(this).data("deleteUrl");
 				var refresh = $(this).data("refresh");
-				myDialogBox({
+				netliva_file_helper.dialog.open({
 					title: 'Silme Onayı',
 					content: 'İlgili dosyayı silmek istediğinizden emin misiniz?',
 					buttons: [
@@ -427,7 +431,90 @@ var netliva_file_helper = {
 		this.showDeletedFileBind();
 		this.netlivaFilePrepareInformationBind();
 	},
+
+	dialog: {
+		open: function (options){
+			options = $.extend({content: '', title: '', class: 'info', buttons: null, ajax:null, init:()=>{}}, options);
+
+			if (!$("#netliva_file_helper_modal").length) netliva_file_helper.dialog.create();
+
+			$("#netliva_file_helper_modal .modal-title").text(options.title);
+			if (options.ajax)
+			{
+				$("#netliva_file_helper_modal .modal-body").html('<div class="text-center">'+commenter.loaders.blocks+'<div><strong>Yükleniyor...</strong></div></div>');
+				$.ajax({
+				   url:options.ajax.url,
+				   data: typeof options.ajax.data !== 'undefined' ? options.ajax.data : {},
+				   dataType: "html", type: "post",
+				   success: function (response) {
+					   $("#netliva_file_helper_modal .modal-body").html(response);
+					   options.init();
+				   }
+			   });
+			}
+			else
+			{
+				$("#netliva_file_helper_modal .modal-body").html(options.content);
+				options.init();
+			}
+
+			$("#netliva_file_helper_modal .modal-header").removeClass().addClass("modal-header bg-"+options.class);
+			$("#netliva_file_helper_modal").modal("show");
+			if (options.buttons) netliva_file_helper.dialog.create_buttons(options.buttons);
+		},
+		close: function () {
+			$("#netliva_file_helper_modal").modal("hide");
+		},
+		create: function () {
+			$("body").append(`
+					<div class="modal fade" id="netliva_file_helper_modal" tabindex="-1" role="dialog" aria-labelledby="netliva_file_helper_modal" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+						<div class="modal-content">
+						  <div class="modal-header">
+							<h5 class="modal-title">Modal title</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							  <span aria-hidden="true">&times;</span>
+							</button>
+						  </div>
+						  <div class="modal-body"> ... </div>
+						  <div class="modal-footer bg-light" style="display: none;"></div>
+						</div>
+					  </div>
+					</div>
+				`);
+		},
+		create_buttons($btns)
+		{
+			if ($btns !== null)
+			{
+				$("#netliva_file_helper_modal").find('.modal-footer').show();
+				$("#netliva_file_helper_modal").find('.modal-footer').html('');
+				$.each($btns, function (index, button)
+				{
+					let btnClass = "success";
+					if (typeof (button.class) !== "undefined")
+						btnClass = button.class;
+					else if (button.action === 'close')
+						btnClass = "danger";
+
+					let $btnTxt = '<button id="netliva_file_helper_modal_btn_' + index + '"';
+					if (button.action === 'close')
+						$btnTxt += 'data-dismiss="modal"';
+					$btnTxt += 'class="btn btn-' + btnClass + '" type="button">' + button.label + '</button>';
+
+					$("#netliva_file_helper_modal").find('.modal-footer').append($btnTxt);
+
+					if (typeof (button.action) === "function")
+					{
+						$("#netliva_file_helper_modal_btn_" + index).click(button.action);
+					}
+				});
+			}
+
+		}
+	}
 }
+window.nfh = netliva_file_helper;
 jQuery(function ($) {
 	$(window).resize(netliva_file_helper.resizeNetlivaFileList);
 	netliva_file_helper.resizeNetlivaFileList();

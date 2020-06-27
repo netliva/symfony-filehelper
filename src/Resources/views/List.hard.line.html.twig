@@ -1,4 +1,4 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 
 {% set file = get_file(group, key) %}
 {% set is_deletable = options.allow_delete is defined and options.allow_delete|is_true and file and file.path %}
@@ -36,5 +36,5 @@
 </div>
 
 <script type="text/javascript">
-	{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+	{% if ajaxload is defined %} nfh.resizeNetlivaFileList(); {% endif %}
 </script>

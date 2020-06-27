@@ -1,6 +1,6 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 {% if fileext is not defined %}
-	{% set fileext = file|get_extention %}
+	{% set fileext = file.path|get_extention %}
 {% endif %}
 
 <div class="file_container"
@@ -8,7 +8,7 @@
 	 data-control-type="{{ opt|is_file_control ? opt.control }}"
 >
 	{% if opt.style == "click" %}
-		<img class="optClickBtn" src="{{ asset("bundles/netlivafile/images/file-icons/"~fileext~"-32.png") }}" />
+		<img class="optClickBtn" src="{{ asset("bundles/netlivasymfonyfilehelper/images/file-icons/"~fileext~"-32.png") }}" />
 		{{'<div class="optClickArea">'}}
 	{% endif %}
 

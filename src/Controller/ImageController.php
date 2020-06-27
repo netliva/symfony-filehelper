@@ -16,7 +16,7 @@ class ImageController extends Controller {
 		$options     = json_decode($request->get("options"));
 		$fileConf    = $this->get('service_container')->getParameter('netliva_filehelper.config');
 		$status      = 'success';
-		$uploadedURL = '';
+		$relativePath= '';
 		$message     = '';
 		if (($image instanceof UploadedFile) && ($image->getError() == '0')) {
 			if (($image->getSize() < 1024 * 1024 * 1024)) {
@@ -26,10 +26,11 @@ class ImageController extends Controller {
 				$valid_filetypes = array('jpg', 'jpeg', 'gif', 'bmp', 'png');
 				if (in_array($file_type, $valid_filetypes))
 				{
+					$subDir = $options->subDirectory ? "categorized/".$options->subDirectory : "files/images";
 					//Start Uploading File
 					$document = new Document();
 					$document->setUploadDirectory($fileConf["upload_path"]);
-					$document->setSubDirectory($options->subDirectory?$options->subDirectory:'images');
+					$document->setSubDirectory($subDir);
 					$document->setFile($image);
 					$document->setOverwrite(isset($options->overwrite) ? $options->overwrite : true);
 					if ($options->newName) $document->setNewName($options->newName);

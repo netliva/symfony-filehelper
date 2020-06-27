@@ -1,9 +1,9 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 
 {% set stackedFiles = get_stack(group~"-"~key) %}
 {% set totalFile = 0 %}
 {% for uploadedInfo in stackedFiles %}
-	{% if uploadedInfo.path and file_exists(uploadedInfo.path) %}
+	{% if uploadedInfo.path and netliva_file_exists(uploadedInfo.path) %}
 		{% set totalFile = totalFile+1 %}
 	{% endif %}
 {% endfor %}
@@ -26,8 +26,8 @@
 		{{ mcr.showFilePreparedInformation(listId~"-_-"~key) }}
 		<div class="sub_list_title d-flex">
 			<span class="folder-icon">
-				<i class="glyph-icon icon-folder"></i>
-				<i class="glyph-icon icon-folder-open"></i>
+				<i class="fa fa-folder"></i>
+				<i class="fa fa-folder-open"></i>
 			</span>
 			<div>
 				{{ value.name }}
@@ -44,7 +44,7 @@
 	<ul class="list-group mrg10T" data-list-id="{{ listId }}" data-file-control="{{ totalFile }}" data-options="{{ options|json_encode }}" data-optional="{{ uploader_btn ? options|is_optional(value, key) : true }}">
 		{% for uploadedInfo in stackedFiles %}
 			<li class="list-group-item {{ (uploadedInfo.assess != "rejection" and not uploadedInfo.path) ? "file_not_exists" }}">
-				{% include "NetlivaFileBundle:File:List.stack.line.html.twig" %}
+				{% include "@NetlivaSymfonyFileHelper/List.stack.line.html.twig" %}
 			</li>
 		{% else %}
 			<li class="list-group-item">

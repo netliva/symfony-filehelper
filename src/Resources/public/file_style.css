@@ -33,7 +33,6 @@
 .singleFileArea.singleFileArea-style-line { position: relative;}
 
 
-
 .thin-button .btn { height: 22px; line-height: 1.4; margin: 0;}
 .thin-button form {	height: 25px; }
 
@@ -65,16 +64,17 @@
 .showDeletedFilesOfStack {float: right;margin-bottom: -10px;}
 .list-sub-group:not(.open) .showDeletedFilesOfStack { display: none; }
 
-#generalDialogBoxSingleFileApprow .modal-body, #generalDialogBoxSingleFileApprow .modal-content { overflow: visible !important; }
+#netliva_file_helper_modal .modal-body, #netliva_file_helper_modal .modal-content { overflow: visible !important; }
 
 .fileInfo .text-warning, .sub_list_title .text-warning {color: orange !important;}
 
+.netliva-file-list .file_container {position: relative;}
 .netliva-file-list figure, .netliva-file-list figcaption { display: inline-block; vertical-align: middle; }
 .netliva-file-list figure { width: 64px; }
 .netliva-file-list figcaption { font-size: 12px; width: calc(100% - 70px) }
 .netliva-file-list figcaption ul { font-size: 10px; padding-left: 15px; }
 .netliva-file-list figure img { height: 64px; width: auto;  }
-.netliva-file-list .pull-right { bottom: 0; position: absolute; right: 10px; z-index: 1; }
+.netliva-file-list .pull-right { bottom: 0; position: absolute; right: 0; z-index: 1; }
 .netliva-file-list > ul > li:hover { background-color: #F1F1F1 !important; }
 .netliva-file-list > ul > li .inPastForFile { margin-top: 10px; opacity: 0.8; display: none; }
 .netliva-file-list > ul > li .inPastForFile > li { background-color: #FAFAFA !important; }

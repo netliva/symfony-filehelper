@@ -73,7 +73,7 @@ class FileList
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(type="text", nullable=true)
+	 * @ORM\Column(name="`desc`", type="text", nullable=true)
 	 */
     private $desc;
 
@@ -141,7 +141,7 @@ class FileList
 	/**
 	 * @return UploaderInterface
 	 */
-	public function getUpdateBy (): UploaderInterface
+	public function getUpdateBy (): ?UploaderInterface
 	{
 		return $this->updateBy;
 	}
@@ -205,7 +205,7 @@ class FileList
 	/**
 	 * @return \DateTime
 	 */
-	public function getUpdateAt (): \DateTime
+	public function getUpdateAt (): ?\DateTime
 	{
 		return $this->updateAt;
 	}
@@ -237,7 +237,7 @@ class FileList
 	/**
 	 * @return string
 	 */
-	public function getDesc (): string
+	public function getDesc (): ?string
 	{
 		return $this->desc;
 	}
@@ -245,7 +245,7 @@ class FileList
 	/**
 	 * @param string $desc
 	 */
-	public function setDesc (string $desc): void
+	public function setDesc (?string $desc): void
 	{
 		$this->desc = $desc;
 	}
@@ -285,7 +285,7 @@ class FileList
 	/**
 	 * @return array
 	 */
-	public function getInPast (): array
+	public function getInPast (): ?array
 	{
 		return $this->inPast;
 	}
@@ -301,7 +301,7 @@ class FileList
 	/**
 	 * @return string
 	 */
-	public function getAssess (): string
+	public function getAssess (): ?string
 	{
 		return $this->assess;
 	}
@@ -309,7 +309,7 @@ class FileList
 	/**
 	 * @param string $assess
 	 */
-	public function setAssess (string $assess): void
+	public function setAssess (?string $assess): void
 	{
 		$this->assess = $assess;
 	}

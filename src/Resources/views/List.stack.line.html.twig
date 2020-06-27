@@ -1,4 +1,4 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 {% set is_hide_deletable = options.hide_stack_delete_btn is defined and options.hide_stack_delete_btn|is_true %}
 
 <div class="file_container"
@@ -22,5 +22,5 @@
 </div>
 
 <script type="text/javascript">
-	{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+	{% if ajaxload is defined %} nfh.resizeNetlivaFileList(); {% endif %}
 </script>

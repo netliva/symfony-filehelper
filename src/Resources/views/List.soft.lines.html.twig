@@ -1,4 +1,4 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 
 {% for files in uploadedFiles %}
 	<li class="list-group-item" id="{{options.group~"-"~files.id}}">
@@ -13,7 +13,7 @@
 				{% elseif options.upload_btn|is_true %}
 					{{ file_uploader_button(options.group, files.code, null, options) }}
 					{% if options.deletable %}
-						<button class="btn btn-danger" deleteRecord data-href="{{ path('netliva_file_fileDelete', {"id": files.id}) }}"><i class="glyph-icon icon-trash"></i></button>
+						<button class="btn btn-danger" deleteRecord data-href="{{ path('netliva_file_fileDelete', {"id": files.id}) }}"><i class="fa fa-trash"></i></button>
 					{% endif %}
 				{% endif %}
 			</div>
@@ -22,7 +22,7 @@
 		</div>
 
 		<script type="text/javascript">
-			{% if ajaxload is defined %} resizeNetlivaFileList(); {% endif %}
+			{% if ajaxload is defined %} nfh.resizeNetlivaFileList(); {% endif %}
 		</script>
 	</li>
 {% endfor %}

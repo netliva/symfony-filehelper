@@ -1,8 +1,8 @@
-{% import '@NetlivaFile/File/macros.html.twig' as mcr %}
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
 
 {% if opt.style == "link" %}
-	<a class="file_list_link_{{ file ? file.id : fileGroup~"-"~fileCode  }}" href="{{ file ? asset(file.path) : "#" }}" target="_blank"><i class="glyph-icon icon-external-link"></i></a>
-	{% if not file or not file_exists(file.path) %}
+	<a class="file_list_link_{{ file ? file.id : fileGroup~"-"~fileCode  }}" href="{{ file ? asset(file.path) : "#" }}" target="_blank"><i class="fa fa-external-link"></i></a>
+	{% if not file or not netliva_file_exists(file.path) %}
 		<script type="text/javascript">
 			jQuery(function ($){
 				$(".file_list_link_{{ file ? file.id : fileGroup~"-"~fileCode }}").click(function(e){
