@@ -59,13 +59,19 @@ netliva_file_helper = {
 			$(this).addClass("binded");
 			$(this).ajaxForm({
 				dataType: 'json',
-				success: function (response) {
-					if (response.status == "success") { }
+				success: function (response, statusText, xhr, $form) {
+					if (response.status == "success") {
+						$form.trigger("netlivaFile:imageUpload:success", [response, $form, xhr, statusText]); // event, response, $formElement, xhr, statusText
+					}
 					else
 					{
-						error(response.message);
+						if (typeof error === "function") error(response.message);
+						$form.trigger("netlivaFile:imageUpload:error", ["response_error", xhr.status, status, response, $form, xhr]); // event, statusType, statusCode,  statusText, response, $formElement, xhr
 					}
-				}
+				},
+				error: function (xhr, status, statusText, $form) {
+					$form.trigger("netlivaFile:imageUpload:error", [status, xhr.status, statusText, xhr.responseText, $form, xhr]); // event, statusType, statusCode,  statusText, response, $formElement, xhr
+				},
 			});
 			$(this).change(function () {
 				$(this).submit();
@@ -89,17 +95,19 @@ netliva_file_helper = {
 						if (response.total > 1 && response.status === "success")
 							success("Tüm dosyalar başarıyla yüklendi", 600);
 						else if (response.status === "partial_success")
-							warning(response.total + " adet dosyadan " + response.success + " adedi başarıyla yüklendi. <br>Yüklenemeyenlerin sebebi; <br> - " +
-									response.messages.join('<br> - '));
+							warning(response.total + " adet dosyadan " + response.success + " adedi başarıyla yüklendi. <br>Yüklenemeyenlerin sebebi; <br> - " + response.messages.join('<br> - '));
+
+						$form.trigger("netlivaFile:upload:success", [response, $form, xhr, status]); // event, response, $formElement, xhr, statusText
 					}
 					else
 					{
-						error("Yüklemek istediğiniz " + (response.total > 1 ? " hiç bir " : "") + " dosya yüklenemedi. <br>Sebepler; <br> - " + response.messages.join(
-							'<br> - '));
+						if (typeof error === "function") error("Yüklemek istediğiniz " + (response.total > 1 ? " hiç bir " : "") + " dosya yüklenemedi. <br>Sebepler; <br> - " + response.messages.join('<br> - '));
+						$form.trigger("netlivaFile:upload:error", ["response_error", xhr.status, status, response, $form, xhr]); // event, statusType, statusCode,  statusText, response, $formElement, xhr
 					}
 					$form.find('input[name="singleFile[]"]').val();
 					$form.find('input[name="singleFile"]').val();
 				}, error: function (response, status, xhr, $form) {
+					$form.trigger("netlivaFile:upload:error", [status, xhr.status, status, xhr.responseText, $form, xhr]); // event, statusType, statusCode,  statusText, response, $formElement, xhr
 					$form.find('input[name="singleFile[]"]').val();
 					$form.find('input[name="singleFile"]').val();
 				}
