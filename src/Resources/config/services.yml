@@ -1,7 +1,7 @@
 services:
 
     netliva.filehelper.image:
-        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
+        alias: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
         public: true
 
 
@@ -16,7 +16,7 @@ services:
 
 
     netliva.filehelper.file:
-        class: Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper
+        alias: Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper
         public: true
 
     Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper:
