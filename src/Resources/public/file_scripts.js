@@ -476,7 +476,7 @@ netliva_file_helper = {
 		create: function () {
 			$("body").append(`
 					<div class="modal fade" id="netliva_file_helper_modal" tabindex="-1" role="dialog" aria-labelledby="netliva_file_helper_modal" aria-hidden="true">
-					  <div class="modal-dialog" role="document">
+					  <div class="modal-dialog modal-dialog-centered" role="document" style="width: 500px;">
 						<div class="modal-content">
 						  <div class="modal-header">
 							<h5 class="modal-title">Modal title</h5>
