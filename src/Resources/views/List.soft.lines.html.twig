@@ -13,7 +13,11 @@
 				{% elseif options.upload_btn|is_true %}
 					{{ file_uploader_button(options.group, files.code, null, options) }}
 					{% if options.deletable %}
-						<button class="btn btn-danger" deleteRecord data-href="{{ path('netliva_file_fileDelete', {"id": files.id}) }}"><i class="fa fa-trash"></i></button>
+						<button
+								class="btn btn-xs btn-danger netlivaDeleteFile"
+								data-delete-url="{{ path('netliva_filehelper_fileDelete', {"id": files.id}) }}"
+								data-refresh='$("#{{options.group~"-"~files.id}}").remove()'
+						><i class="fa fa-trash"></i></button>
 					{% endif %}
 				{% endif %}
 			</div>
