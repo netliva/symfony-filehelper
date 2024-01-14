@@ -58,6 +58,9 @@ class UploadFileMover
             $targetDir .= DIRECTORY_SEPARATOR . $this->getRelativePath();
         }
 
+        if (!is_dir($targetDir))
+            mkdir($targetDir, 0777, true);
+
         if	($this->overwrite)
         {
             if	(file_exists($targetDir.DIRECTORY_SEPARATOR.$name)) {
