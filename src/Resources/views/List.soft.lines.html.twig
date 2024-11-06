@@ -10,8 +10,10 @@
 			<div class="pull-right" style="display: flex">
 				{% if options|is_file_control %}
 					{{ mcr.showFileController(files) }}
-				{% elseif options.upload_btn|is_true %}
-					{{ file_uploader_button(options.group, files.code, null, options) }}
+				{% else %}
+					{% if options.upload_btn_in_list|is_true %}
+						{{ file_uploader_button(options.group, files.code, null, options) }}
+					{% endif %}
 					{% if options.deletable %}
 						<button
 								class="btn btn-xs btn-danger netlivaDeleteFile"
