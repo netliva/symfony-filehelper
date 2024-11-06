@@ -333,6 +333,7 @@ netliva_file_helper = {
 									dataType: "json",
 									type: "post",
 									success: function () {
+										netliva_file_helper.dialog.close();
 										eval(refresh);
 									}
 								});
