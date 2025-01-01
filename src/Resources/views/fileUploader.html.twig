@@ -12,8 +12,7 @@
 		{{'<div class="optClickArea">'}}
 	{% endif %}
 
-	<div class="pull-right {{ opt.allow_delete is defined and opt.allow_delete and fileext != "notfound" ? "nfb_allow_delete_area" }}">
-
+	<div class="pull-right {{ opt.allow_delete is defined and opt.allow_delete and opt.allow_delete is not same as ("false") and fileext != "notfound" ? "nfb_allow_delete_area" }}">
 		{% set uploader_btn = false %}
 		{% if opt|is_prepare_information %}
 			{{ mcr.perpareInformation(fileGroup, opt.name is defined? opt.name) }}
@@ -22,7 +21,7 @@
 		{% elseif opt.upload_btn|is_true %}
 			{% set uploader_btn = true %}
 			{{ file_uploader_button(fileGroup, fileCode, null, opt) }}
-			{% if opt.allow_delete is defined and opt.allow_delete and opt.allow_delete != "false" and fileext != "notfound" %}
+			{% if opt.allow_delete is defined and opt.allow_delete and opt.allow_delete is not same as ("false") and fileext != "notfound" %}
 				<button
 						class="btn btn-xs btn-danger netlivaDeleteFile"
 						data-delete-url="{{ path("netliva_filehelper_singleFileDelete",{fileGroup:fileGroup, fileCode:fileCode}) }}"
