@@ -269,7 +269,7 @@ class FileList
 	/**
 	 * @return string
 	 */
-	public function getExtention (): string
+	public function getExtention (): ?string
 	{
 		return $this->extention;
 	}
@@ -277,7 +277,7 @@ class FileList
 	/**
 	 * @param string $extention
 	 */
-	public function setExtention (string $extention): void
+	public function setExtention (?string $extention): void
 	{
 		$this->extention = $extention;
 	}
