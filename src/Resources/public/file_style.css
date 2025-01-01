@@ -38,7 +38,7 @@
 
 .nfb_allow_delete_area { padding-bottom: 10px; }
 .nfb_allow_delete_area .fileinput { margin-bottom: 4px; }
-.nfb_allow_delete_area .fileinput .btn { height: 24px; line-height: 1.6; width: 40px; }
+.nfb_allow_delete_area .fileinput .btn { height: 24px; line-height: 1.6; width: 40px; padding: 0; }
 .nfb_allow_delete_area .netlivaDeleteFile { width: 40px;}
 
 .file_list_info_icon {position: absolute;left: 3px;top:0;font-size: 16px;color: #09f;}
