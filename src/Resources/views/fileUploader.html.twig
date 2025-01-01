@@ -25,7 +25,7 @@
 				<button
 						class="btn btn-xs btn-danger netlivaDeleteFile"
 						data-delete-url="{{ path("netliva_filehelper_singleFileDelete",{fileGroup:fileGroup, fileCode:fileCode}) }}"
-						data-refresh='refreshSingleFileUpload("{{ fileGroup }}", "{{ fileCode }}")'
+						data-refresh='netliva_file_helper.refreshSingleFileUpload("{{ fileGroup }}", "{{ fileCode }}")'
 				>SİL</button>
 			{% endif %}
 		{% endif %}
