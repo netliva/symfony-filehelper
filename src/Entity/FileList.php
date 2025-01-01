@@ -253,7 +253,7 @@ class FileList
 	/**
 	 * @return string
 	 */
-	public function getPath (): string
+	public function getPath (): ?string
 	{
 		return $this->path;
 	}
@@ -261,7 +261,7 @@ class FileList
 	/**
 	 * @param string $path
 	 */
-	public function setPath (string $path): void
+	public function setPath (?string $path): void
 	{
 		$this->path = $path;
 	}
