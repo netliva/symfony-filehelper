@@ -1,7 +1,7 @@
 <?php
 namespace Netliva\SymfonyFileHelperBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class PublicUrlEvent extends Event
 {

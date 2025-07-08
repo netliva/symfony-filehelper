@@ -2,7 +2,7 @@
 namespace Netliva\SymfonyFileHelperBundle\Event;
 
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class SecuredUrlEvent extends Event
 {
