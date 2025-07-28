@@ -44,11 +44,11 @@ class NetlivaFileHelper extends AbstractExtension
 		$this->twig      = $twig;
 	}
 
-    public function setRequest(Request $request = null)
+    public function setRequest(Request $request = null): void
     {
         $this->request = $request;
     }
-    public function getFilters ()
+    public function getFilters(): array
 	{
 		return [
 			new TwigFilter('get_extention', [$this, 'getExtention']),
@@ -61,7 +61,7 @@ class NetlivaFileHelper extends AbstractExtension
 		];
 	}
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array(
 			new TwigFunction('secure_media_uri', [$this, 'mediaSecureUri']),

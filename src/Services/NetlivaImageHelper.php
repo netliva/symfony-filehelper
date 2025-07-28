@@ -39,7 +39,7 @@ class NetlivaImageHelper extends AbstractExtension
     }
 
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array(
             new TwigFunction('get_single_image_uploader', [$this, 'getSingleImageUploader'], array('is_safe' => array('html'))),
