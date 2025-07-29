@@ -4,106 +4,91 @@ namespace Netliva\SymfonyFileHelperBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="netliva_file_list")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'netliva_file_list')]
 class FileList
 {
 	/**
-	 * @var integer
-	 *
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
-	 */
+     * @var integer
+     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
 	/**
-	 * @var UploaderInterface
-	 *
-	 * @ORM\ManyToOne(targetEntity="UploaderInterface")
-	 * @ORM\JoinColumn()
-	 */
-	private $addBy;
+     * @var UploaderInterface
+     */
+    #[ORM\ManyToOne(targetEntity: UploaderInterface::class)]
+    #[ORM\JoinColumn]
+    private $addBy;
 
 	/**
-	 * @var UploaderInterface
-	 *
-	 * @ORM\ManyToOne(targetEntity="UploaderInterface")
-	 * @ORM\JoinColumn(nullable=true)
-	 */
-	private $updateBy;
+     * @var UploaderInterface
+     */
+    #[ORM\ManyToOne(targetEntity: UploaderInterface::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private $updateBy;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="`group`", type="string", length=255)
-	 */
+     * @var string
+     */
+    #[ORM\Column(name: '`group`', type: 'string', length: 255)]
     private $group;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $code;
 
 	/**
-	 * @var \DateTime
-	 *
-	 * @ORM\Column(type="datetime")
-	 */
+     * @var \DateTime
+     */
+    #[ORM\Column(type: 'datetime')]
     private $addAt;
 
 	/**
-	 * @var \DateTime
-	 *
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
+     * @var \DateTime
+     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $updateAt;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(type="string", length=255)
-	 */
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="`desc`", type="text", nullable=true)
-	 */
+     * @var string
+     */
+    #[ORM\Column(name: '`desc`', type: 'text', nullable: true)]
     private $desc;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(type="text", nullable=true)
-	 */
+     * @var string
+     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $path;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $extention;
 
 
 	/**
-	 * @var array
-	 *
-	 * @ORM\Column(type="json", nullable=true)
-	 */
+     * @var array
+     */
+    #[ORM\Column(type: 'json', nullable: true)]
     private $inPast;
 
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(type="string", length=32, nullable=true)
-	 */
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private $assess;
 
 	/**

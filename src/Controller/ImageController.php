@@ -3,18 +3,18 @@
 namespace Netliva\SymfonyFileHelperBundle\Controller;
 
 use Netliva\SymfonyFileHelperBundle\Models\Document;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
-class ImageController extends Controller {
+class ImageController extends AbstractController {
 
 	public function singleUploadAction(Request $request) {
 		$image       = $request->files->get('singleImg');
 		$options     = json_decode($request->get("options"));
-		$fileConf    = $this->get('service_container')->getParameter('netliva_filehelper.config');
+		$fileConf    = $this->getParameter('netliva_filehelper.config');
 		$status      = 'success';
 		$relativePath= '';
 		$message     = '';
@@ -22,7 +22,7 @@ class ImageController extends Controller {
 			if (($image->getSize() < 1024 * 1024 * 1024)) {
 				$originalName = $image->getClientOriginalName();
 				$name_array = explode('.', $originalName);
-				$file_type = strtolower($name_array[sizeof($name_array) - 1]);
+				$file_type = strtolower($name_array[count($name_array) - 1]);
 				$valid_filetypes = array('jpg', 'jpeg', 'gif', 'bmp', 'png');
 				if (in_array($file_type, $valid_filetypes))
 				{
@@ -32,7 +32,7 @@ class ImageController extends Controller {
 					$document->setUploadDirectory($fileConf["upload_path"]);
 					$document->setSubDirectory($subDir);
 					$document->setFile($image);
-					$document->setOverwrite(isset($options->overwrite) ? $options->overwrite : true);
+					$document->setOverwrite($options->overwrite ?? true);
 					if ($options->newName) $document->setNewName($options->newName);
 					$document->processFile();
 					$relativePath = $document->getRelativePath();

@@ -16,22 +16,10 @@ use Twig\TwigFunction;
  */
 class NetlivaImageHelper extends AbstractExtension
 {
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Request $request;
 
-
-	private   $container;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
-
-	public function __construct(ContainerInterface $container, Environment $twig){
-		$this->container = $container;
-		$this->twig      = $twig;
-	}
+	public function __construct(private readonly Environment $twig)
+    { }
 
     public function setRequest(Request $request = null)
     {
@@ -42,7 +30,7 @@ class NetlivaImageHelper extends AbstractExtension
     public function getFunctions(): array
     {
         return array(
-            new TwigFunction('get_single_image_uploader', [$this, 'getSingleImageUploader'], array('is_safe' => array('html'))),
+            new TwigFunction('get_single_image_uploader', $this->getSingleImageUploader(...), array('is_safe' => array('html'))),
         );
     }
 

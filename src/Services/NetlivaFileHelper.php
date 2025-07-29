@@ -2,6 +2,7 @@
 namespace Netliva\SymfonyFileHelperBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Netliva\SymfonyFileHelperBundle\Entity\FileList;
 use Netliva\SymfonyFileHelperBundle\Event\NetlivaFileHelperEvents;
 use Netliva\SymfonyFileHelperBundle\Event\PublicUrlEvent;
@@ -28,20 +29,12 @@ class NetlivaFileHelper extends AbstractExtension
      */
     protected $request;
 
-    /** @var ContainerInterface */
-    protected $container;
-    /** @var EntityManager */
-	protected $em;
-	/**
-	 * @var Environment
-	 */
-	private $twig;
 
-
-	public function __construct($em, ContainerInterface $container, Environment $twig){
-		$this->container = $container;
-		$this->em        = $em;
-		$this->twig      = $twig;
+	public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly ContainerInterface $container,
+        private readonly Environment $twig
+    ){
 	}
 
     public function setRequest(Request $request = null): void
@@ -51,31 +44,31 @@ class NetlivaFileHelper extends AbstractExtension
     public function getFilters(): array
 	{
 		return [
-			new TwigFilter('get_extention', [$this, 'getExtention']),
-			new TwigFilter('uploaded_count', [$this, 'uploadedCount']),
-			new TwigFilter('is_file_control', [$this, 'isFileControl']),
-			new TwigFilter('is_optional', [$this, 'isOptional']),
-			new TwigFilter('get_file_thumbnail', [$this, 'getFileThumbnail']),
-			new TwigFilter('is_prepare_information', [$this, 'isPrepareInformation']),
-			new TwigFilter('is_true', [$this, 'isTrue']),
+			new TwigFilter('get_extention', $this->getExtention(...)),
+			new TwigFilter('uploaded_count', $this->uploadedCount(...)),
+			new TwigFilter('is_file_control', $this->isFileControl(...)),
+			new TwigFilter('is_optional', $this->isOptional(...)),
+			new TwigFilter('get_file_thumbnail', $this->getFileThumbnail(...)),
+			new TwigFilter('is_prepare_information', $this->isPrepareInformation(...)),
+			new TwigFilter('is_true', $this->isTrue(...)),
 		];
 	}
 
     public function getFunctions(): array
     {
         return array(
-			new TwigFunction('secure_media_uri', [$this, 'mediaSecureUri']),
-			new TwigFunction('public_media_uri', [$this, 'mediaPublicUri']),
-            new TwigFunction('get_file_path', [$this, 'getFilePath'],array('is_safe' => array('html'))),
-            new TwigFunction('get_file_path_if_exist', [$this, 'getFilePathIfExist'],array('is_safe' => array('html'))),
-            new TwigFunction('get_file', [$this, 'getFile']),
-            new TwigFunction('get_stack', [$this, 'getStack']),
-            new TwigFunction('show_file', [$this, 'showFile'],array('is_safe' => array('html'))),
-            new TwigFunction('get_hard_file_list', [$this, 'getHardFileList'],array('is_safe' => array('html'))),
-            new TwigFunction('get_soft_file_list', [$this, 'getSoftFileList'],array('is_safe' => array('html'))),
-            new TwigFunction('file_uploader_button', [$this, 'fileUploaderButton'],array('is_safe' => array('html'))),
-            new TwigFunction('file_uploader_widget', [$this, 'fileUploader'],array('is_safe' => array('html'))),
-			new TwigFunction('netliva_file_exists', [$this, 'fileExists']),
+			new TwigFunction('secure_media_uri', $this->mediaSecureUri(...)),
+			new TwigFunction('public_media_uri', $this->mediaPublicUri(...)),
+            new TwigFunction('get_file_path', $this->getFilePath(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_file_path_if_exist', $this->getFilePathIfExist(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_file', $this->getFile(...)),
+            new TwigFunction('get_stack', $this->getStack(...)),
+            new TwigFunction('show_file', $this->showFile(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_hard_file_list', $this->getHardFileList(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_soft_file_list', $this->getSoftFileList(...),array('is_safe' => array('html'))),
+            new TwigFunction('file_uploader_button', $this->fileUploaderButton(...),array('is_safe' => array('html'))),
+            new TwigFunction('file_uploader_widget', $this->fileUploader(...),array('is_safe' => array('html'))),
+			new TwigFunction('netliva_file_exists', $this->fileExists(...)),
         );
     }
 
@@ -104,26 +97,26 @@ class NetlivaFileHelper extends AbstractExtension
 	public function isFileControl ($options)
 	{
 		if (is_object($options)) $options = (array)$options;
-		return $options and is_array($options) and key_exists("control", $options) and $options["control"] and $options["control"] !== "false" and $options["control"] !== "0";
+		return $options and is_array($options) and array_key_exists("control", $options) and $options["control"] and $options["control"] !== "false" and $options["control"] !== "0";
     }
 
 	public function isOptional (array $options, array $value, string $key)
 	{
-		if (key_exists("requirement", $options))
+		if (array_key_exists("requirement", $options))
 		{
 			if (is_string($options["requirement"]))
 			{
 				if ($options["requirement"] === "required") return false;
 				if ($options["requirement"] === "optional") return true;
 			}
-			elseif (is_array($options["requirement"]) and count($options["requirement"]) and key_exists($key, $options["requirement"]))
+			elseif (is_array($options["requirement"]) and count($options["requirement"]) and array_key_exists($key, $options["requirement"]))
 			{
 				if ($options["requirement"][$key] === "required") return false;
 				if ($options["requirement"][$key] === "optional") return true;
 			}
 		}
 
-		if (key_exists("optional", $value) and $value["optional"] and $value["optional"] !== "false" and $value["optional"] !== "0") return true;
+		if (array_key_exists("optional", $value) and $value["optional"] and $value["optional"] !== "false" and $value["optional"] !== "0") return true;
 
 		return false;
 	}
@@ -131,7 +124,7 @@ class NetlivaFileHelper extends AbstractExtension
 	public function isPrepareInformation ($options)
 	{
 		if (is_object($options)) $options = (array)$options;
-		return $options and is_array($options) and key_exists("prepare_information", $options) and $options["prepare_information"] and $options["prepare_information"] !== "false" and $options["prepare_information"] !== "0";
+		return $options and is_array($options) and array_key_exists("prepare_information", $options) and $options["prepare_information"] and $options["prepare_information"] !== "false" and $options["prepare_information"] !== "0";
     }
 
 	public function istrue ($value)
@@ -154,7 +147,7 @@ class NetlivaFileHelper extends AbstractExtension
 	private function getPathString ($path)
 	{
 		if ($path instanceof FileList) $path = $path->getPath();
-		if (is_array($path) and key_exists("path", $path)) $path = $path["path"];
+		if (is_array($path) and array_key_exists("path", $path)) $path = $path["path"];
 		if (!is_string($path)) $path = null;
 
 		return $path;
@@ -326,7 +319,7 @@ class NetlivaFileHelper extends AbstractExtension
 
     public function getSoftFileListDatas($options)
     {
-		if (!key_exists("group",$options)) { echo ('HATA: Dosya Grup Bilgisi Gerekli!'); return false; }
+		if (!array_key_exists("group",$options)) { echo ('HATA: Dosya Grup Bilgisi Gerekli!'); return false; }
 
 		$default = [
             "title"              => "Dosya Listesi",
@@ -337,7 +330,7 @@ class NetlivaFileHelper extends AbstractExtension
             "upload_btn_in_list" => true,
 		];
 		$options = array_merge($default, $options);
-        $uploadedFiles = $this->em->getRepository(FileList::class)->findByGroup($options['group']);
+        $uploadedFiles = $this->em->getRepository(FileList::class)->findBy(['group' => $options['group']]);
 
         return [
 			"options"       => $options,
