@@ -1,39 +1,39 @@
 netliva_filehelper_singleImageUpload:
     path:     /upload/image/single
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:Image:singleUpload }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\ImageController::singleUploadAction }
 
 netliva_filehelper_singleFileUpload:
     path:     /upload/file/single
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:singleUpload }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::singleUploadAction }
 
 netliva_filehelper_assess:
     path:     /file/assess
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:assess }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::assessAction }
 
 netliva_filehelper_all_approve:
     path:     /file/all/approve
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:allApprove }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::allApproveAction }
 
 netliva_filehelper_singleFileDelete:
     path:     /delete/file/single/{fileGroup}/{fileCode}
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:singleDelete}
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::singleDeleteAction }
 
 netliva_filehelper_refreshSoftList:
     path:     /upload/file/single/refreshSoftList
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:refreshSoftList }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::refreshSoftListAction }
 
 netliva_filehelper_refreshLine:
     path:     /upload/file/single/refresh
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:refreshLine }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::refreshLineAction }
 
 netliva_stack_refreshLine:
     path:     /upload/stack/refresh
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:refreshStack }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::refreshStackAction }
 
 netliva_filehelper_refreshSingleFileWithIcon:
     path:     /upload/file/single/refreshWithIcon
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:refreshSingleWithIcon }
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::refreshSingleWithIconAction }
 
 netliva_filehelper_fileDelete:
     path:     /delete/file/line/{id}
-    defaults: { _controller: NetlivaSymfonyFileHelperBundle:File:delete}
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::deleteAction }

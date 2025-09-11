@@ -1,9 +1,11 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
     netliva.filehelper.image:
         alias: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
         public: true
-
 
     Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper:
         class: Netliva\SymfonyFileHelperBundle\Services\NetlivaImageHelper
@@ -13,7 +15,6 @@ services:
             - [setRequest, ["@?request="]]
         tags:
             - { name: twig.extension }
-
 
     netliva.filehelper.file:
         alias: Netliva\SymfonyFileHelperBundle\Services\NetlivaFileHelper
@@ -27,3 +28,14 @@ services:
             - [setRequest, ["@?request="]]
         tags:
             - { name: twig.extension }
+
+    # Controller services
+    Netliva\SymfonyFileHelperBundle\Controller\ImageController:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    Netliva\SymfonyFileHelperBundle\Controller\FileController:
+        public: true
+        autowire: true
+        autoconfigure: true

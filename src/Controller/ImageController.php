@@ -7,14 +7,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 
 class ImageController extends AbstractController {
 
+	public function __construct(
+		private readonly ParameterBagInterface $parameterBag
+	) {}
+
 	public function singleUploadAction(Request $request) {
 		$image       = $request->files->get('singleImg');
 		$options     = json_decode($request->get("options"));
-		$fileConf    = $this->getParameter('netliva_filehelper.config');
+		$fileConf    = $this->parameterBag->get('netliva_filehelper.config');
 		$status      = 'success';
 		$relativePath= '';
 		$message     = '';
