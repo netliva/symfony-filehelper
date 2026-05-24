@@ -51,4 +51,9 @@
 			{% if ajaxload is defined %} nfh.resizeNetlivaFileList(); {% endif %}
 		</script>
 	</div>
+{% else %}
+    <div class="w-100 text-center text-muted" style="width: 100%; grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; background: #fdfdfd; border-radius: 10px; border: 2px dashed #eee;">
+        <i class="fa fa-image fa-3x" style="color: #ddd; margin-bottom: 10px;"></i>
+        <span>Henüz bu galeriye fotoğraf eklenmedi.</span>
+    </div>
 {% endfor %}
