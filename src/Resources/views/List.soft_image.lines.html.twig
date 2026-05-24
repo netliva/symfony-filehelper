@@ -1,0 +1,54 @@
+{% import '@NetlivaSymfonyFileHelper/macros.html.twig' as mcr %}
+
+{% for files in uploadedFiles %}
+	<div class="gallery-item" id="{{options.group~"-"~files.id}}">
+		<div class="file_container"
+			 data-control="{{ options|is_file_control }}"
+			 data-control-type="{{ options|is_file_control ? options.control }}"
+		>
+            {% set filePath = null %}
+            {% if netliva_file_exists(files.path) %}
+                {% set fileHref = options.hash is defined and options.hash ? public_media_uri(files.path) : secure_media_uri(files.path) %}
+                {% set filePath = options.hash is defined and options.hash 
+					? public_media_uri(files.path) 
+					: (
+						(options.use_image_filter is defined and options.use_image_filter)
+						? asset(files.path)|imagine_filter(options.use_image_filter)
+						: secure_media_uri(files.path)
+					) %}
+            {% endif %}
+
+            {% if filePath %}
+                <a href="{{ asset(fileHref) }}" target="_blank">
+                    <img src="{{ asset(filePath) }}" alt="{{ files.name }}" title="{{ files.name }}">
+                </a>
+            {% else %}
+                <div class="not-found-placeholder">
+                    <em class="text-danger" style="font-size: 12px;">Bulunamadı</em>
+                </div>
+            {% endif %}
+
+			<div class="gallery-item-actions">
+				{% if options|is_file_control %}
+					{{ mcr.showFileController(files) }}
+				{% else %}
+					{% if options.upload_btn_in_list|is_true %}
+						{{ file_uploader_button(options.group, files.code, null, options|merge({'button_desc': false, 'style': 'icon'})) }}
+					{% endif %}
+					{% if options.deletable %}
+						<button
+								class="btn btn-xs btn-danger netlivaDeleteFile"
+								data-delete-url="{{ path('netliva_filehelper_fileDelete', {"id": files.id}) }}"
+								data-refresh='$("#{{options.group~"-"~files.id}}").remove()'
+                                title="Sil"
+						><i class="fa fa-trash"></i></button>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			{% if ajaxload is defined %} nfh.resizeNetlivaFileList(); {% endif %}
+		</script>
+	</div>
+{% endfor %}

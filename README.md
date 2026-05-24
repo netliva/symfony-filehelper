@@ -85,6 +85,14 @@ netliva_filehelper:
     'class': 'file-list',
     'show_thumbnails': true
 }) }}
+
+{# Sadece resim listesi (Grid / Galeri Görünümü) #}
+{{ get_soft_image_list({
+    group: "gallery_images",
+    title: "Galeri Fotoğrafları",
+    subDir: "gallery",
+    deletable: true
+}) }}
 ```
 
 #### Dosya Yükleme Widget'ları

@@ -88,7 +88,8 @@ class FileController extends AbstractController
 	public function refreshSoftListAction(Request $request)
 	{
 		$options = json_decode($request->get('opt'), true);
-        return $this->render('@NetlivaSymfonyFileHelper/List.soft.lines.html.twig', $this->netlivaFileHelper->getSoftFileListDatas($options));
+        $template = isset($options['is_image_gallery']) && $options['is_image_gallery'] ? '@NetlivaSymfonyFileHelper/List.soft_image.lines.html.twig' : '@NetlivaSymfonyFileHelper/List.soft.lines.html.twig';
+        return $this->render($template, $this->netlivaFileHelper->getSoftFileListDatas($options));
 	}
 
 	public function refreshStackAction (Request $request)

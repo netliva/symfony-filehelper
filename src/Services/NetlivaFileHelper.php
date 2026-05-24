@@ -66,6 +66,7 @@ class NetlivaFileHelper extends AbstractExtension
             new TwigFunction('show_file', $this->showFile(...),array('is_safe' => array('html'))),
             new TwigFunction('get_hard_file_list', $this->getHardFileList(...),array('is_safe' => array('html'))),
             new TwigFunction('get_soft_file_list', $this->getSoftFileList(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_soft_image_list', $this->getSoftImageList(...),array('is_safe' => array('html'))),
             new TwigFunction('file_uploader_button', $this->fileUploaderButton(...),array('is_safe' => array('html'))),
             new TwigFunction('file_uploader_widget', $this->fileUploader(...),array('is_safe' => array('html'))),
 			new TwigFunction('netliva_file_exists', $this->fileExists(...)),
@@ -340,6 +341,21 @@ class NetlivaFileHelper extends AbstractExtension
     public function getSoftFileList($options)
     {
         return $this->twig->render('@NetlivaSymfonyFileHelper/List.soft.html.twig', $this->getSoftFileListDatas($options));
+    }
+
+    public function getSoftImageList($options)
+    {
+		$default = [
+			'getName' => false,
+			'upload_btn_in_list' => false,
+			'use_image_filter' => false,
+			'desc' => 'Galeri listesine yeni fotoğraflar ekleyebilirsiniz'
+		];
+        $options['accept'] = 'image/*';
+        $options['is_image_gallery'] = true;
+		$options = array_merge($default, $options);
+
+        return $this->twig->render('@NetlivaSymfonyFileHelper/List.soft_image.html.twig', $this->getSoftFileListDatas($options));
     }
     public function fileUploaderButton($fileGroup, $fileCode=null, $listId=null, $opt=null)
     {

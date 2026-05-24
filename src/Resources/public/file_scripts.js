@@ -396,7 +396,10 @@ netliva_file_helper = {
 			type: "post",
 			data: {opt: $("#opt" + fileGroup).val()},
 			success: function (response) {
-				$("#netliva-file-list-" + fileGroup + " .list-group").html(response);
+				if ($("#netliva-file-list-" + fileGroup + " .list-group").length > 0)
+					$("#netliva-file-list-" + fileGroup + " .list-group").html(response);
+				else if ($("#netliva-file-list-" + fileGroup + " .netliva-gallery-grid").length > 0)
+					$("#netliva-file-list-" + fileGroup + " .netliva-gallery-grid").html(response);
 			}
 		});
 
