@@ -37,3 +37,7 @@ netliva_filehelper_refreshSingleFileWithIcon:
 netliva_filehelper_fileDelete:
     path:     /delete/file/line/{id}
     defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::deleteAction }
+
+netliva_filehelper_set_cover:
+    path:     /set-cover/{id}
+    defaults: { _controller: Netliva\SymfonyFileHelperBundle\Controller\FileController::setCoverAction }

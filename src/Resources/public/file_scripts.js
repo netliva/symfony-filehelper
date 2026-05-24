@@ -431,6 +431,29 @@ netliva_file_helper = {
 	},
 
 
+	netlivaSetCoverBind : function ()
+	{
+		$(".netlivaSetCoverBtn:not(.binded)").each(function () {
+			$(this).addClass("binded");
+			$(this).click(function (e) {
+				e.preventDefault();
+				var url = $(this).data("url");
+				var refresh = $(this).data("refresh");
+				
+				$.ajax({
+					url: url,
+					data: {},
+					dataType: "json",
+					type: "post",
+					success: function () {
+						eval(refresh);
+					}
+				});
+				return false;
+			});
+		});
+	},
+
 	init : function ()
 	{
 		this.showPastBtnBind();
@@ -442,6 +465,7 @@ netliva_file_helper = {
 		this.netlivaFileControlBind();
 		this.showDeletedFileBind();
 		this.netlivaFilePrepareInformationBind();
+		this.netlivaSetCoverBind();
 	},
 
 	dialog: {

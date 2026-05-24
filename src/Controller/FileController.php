@@ -225,6 +225,33 @@ class FileController extends AbstractController
 
 	}
 
+	public function setCoverAction($id)
+	{
+		$file = $this->entityManager->getRepository(FileList::class)->find($id);
+		if (!$file) {
+			return new JsonResponse(['status' => 'error', 'message' => 'Dosya bulunamadı']);
+		}
+
+		$group = $file->getGroup();
+		
+		// Reset all files in this group
+		$qb = $this->entityManager->createQueryBuilder();
+		$qb->update(FileList::class, 'f')
+		   ->set('f.isCover', ':falseVal')
+		   ->where('f.group = :group')
+		   ->setParameter('falseVal', false)
+		   ->setParameter('group', $group)
+		   ->getQuery()
+		   ->execute();
+
+		// Set selected as cover
+		$file->setIsCover(true);
+		$this->entityManager->persist($file);
+		$this->entityManager->flush();
+
+		return new JsonResponse(['status' => 'success']);
+	}
+
 	public function assessAction(Request $request)
 	{
 		$fileId    = $request->request->get("fileId");

@@ -67,6 +67,7 @@ class NetlivaFileHelper extends AbstractExtension
             new TwigFunction('get_hard_file_list', $this->getHardFileList(...),array('is_safe' => array('html'))),
             new TwigFunction('get_soft_file_list', $this->getSoftFileList(...),array('is_safe' => array('html'))),
             new TwigFunction('get_soft_image_list', $this->getSoftImageList(...),array('is_safe' => array('html'))),
+            new TwigFunction('get_cover_image', $this->getCoverImage(...),array('is_safe' => array('html'))),
             new TwigFunction('file_uploader_button', $this->fileUploaderButton(...),array('is_safe' => array('html'))),
             new TwigFunction('file_uploader_widget', $this->fileUploader(...),array('is_safe' => array('html'))),
 			new TwigFunction('netliva_file_exists', $this->fileExists(...)),
@@ -357,6 +358,29 @@ class NetlivaFileHelper extends AbstractExtension
 
         return $this->twig->render('@NetlivaSymfonyFileHelper/List.soft_image.html.twig', $this->getSoftFileListDatas($options));
     }
+
+	public function getCoverImage($group, $filter = null, $defaultImage = null)
+	{
+		$em = $this->container->get('doctrine')->getManager();
+		$file = $em->getRepository(FileList::class)->findOneBy(['group' => $group, 'isCover' => true]);
+		
+		if (!$file) {
+			// Fallback to the first image if no cover is explicitly set
+			$file = $em->getRepository(FileList::class)->findOneBy(['group' => $group]);
+		}
+
+		if ($file && $this->fileExists($file->getPath())) {
+			$path = $this->mediaPublicUri($file->getPath());
+			// Or we could return the asset path depending on the context
+			return [
+				'file' => $file,
+				'path' => $path, // This might be used directly in asset() or imagine_filter()
+				'rawPath' => $file->getPath()
+			];
+		}
+
+		return null;
+	}
     public function fileUploaderButton($fileGroup, $fileCode=null, $listId=null, $opt=null)
     {
 		// maxDate : seçilecek en yüksek tarih

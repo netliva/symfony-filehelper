@@ -35,6 +35,14 @@
 					{% if options.upload_btn_in_list|is_true %}
 						{{ file_uploader_button(options.group, files.code, null, options|merge({'button_desc': false, 'style': 'icon'})) }}
 					{% endif %}
+					
+					<button
+							class="btn btn-xs {{ files.isCover ? 'btn-warning' : 'btn-default' }} netlivaSetCoverBtn"
+							data-url="{{ path('netliva_filehelper_set_cover', {"id": files.id}) }}"
+							data-refresh='netliva_file_helper.refreshFileSoftLine("{{options.group}}")'
+							title="Vitrin Yap"
+					><i class="fa-{{ files.isCover ? 'solid' : 'regular' }} fa-star"></i></button>
+
 					{% if options.deletable %}
 						<button
 								class="btn btn-xs btn-danger netlivaDeleteFile"

@@ -92,6 +92,12 @@ class FileList
     private $assess;
 
 	/**
+     * @var bool
+     */
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private $isCover = false;
+
+	/**
 	 * @return int
 	 */
 	public function getId (): int
@@ -300,5 +306,20 @@ class FileList
 	}
 
 
+	/**
+	 * @return bool
+	 */
+	public function getIsCover(): bool
+	{
+		return $this->isCover;
+	}
+
+	/**
+	 * @param bool $isCover
+	 */
+	public function setIsCover(bool $isCover): void
+	{
+		$this->isCover = $isCover;
+	}
 
 }
