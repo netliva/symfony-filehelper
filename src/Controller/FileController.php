@@ -218,6 +218,21 @@ class FileController extends AbstractController
 		if (!$file)
 			return new JsonResponse(array('status' => "error"));
 
+		$config = $this->parameterBag->get("netliva_filehelper.config");
+		$uploadPath = rtrim($config["upload_path"], '/') . '/';
+
+		if ($file->getPath() && file_exists($uploadPath . ltrim($file->getPath(), '/'))) {
+			@unlink($uploadPath . ltrim($file->getPath(), '/'));
+		}
+
+		if ($file->getInPast() && is_array($file->getInPast())) {
+			foreach ($file->getInPast() as $pastFile) {
+				if (isset($pastFile['path']) && $pastFile['path'] && file_exists($uploadPath . ltrim($pastFile['path'], '/'))) {
+					@unlink($uploadPath . ltrim($pastFile['path'], '/'));
+				}
+			}
+		}
+
 		$this->entityManager->remove($file);
 		$this->entityManager->flush();
 
