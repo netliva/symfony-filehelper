@@ -350,7 +350,8 @@ class NetlivaFileHelper extends AbstractExtension
 			'getName' => false,
 			'upload_btn_in_list' => false,
 			'use_image_filter' => false,
-			'desc' => 'Galeriye yeni fotoğraflar ekleyebilirsiniz'
+			'desc' => 'Galeriye yeni fotoğraflar ekleyebilirsiniz',
+			'multiupload' => true,
 		];
         $options['accept'] = 'image/*';
         $options['is_image_gallery'] = true;
